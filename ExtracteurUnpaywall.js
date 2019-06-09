@@ -38,7 +38,7 @@ var oa = 0;
 var timer = "";
 
 // Result
-var result = [["DOI","bilan OA","article en OA d'après Unpaywall ?","revue en OA d'après Unpaywall ?","revue dans le DOAJ d'après Unpaywall ?","Meilleure source du texte intégral selon Unpaywall","Identifiant HAL du dépôt","nb de notices HAL pour ce DOI","article en OA via HAL + ISTEX ?","URL article OA via HAL + ISTEX","texte intégral dans HAL ?"]];
+var result = [["DOI","bilan OA","article en OA d'après Unpaywall ?","revue en OA d'après Unpaywall ?","revue dans le DOAJ d'après Unpaywall ?","Meilleure source du texte intégral selon Unpaywall","Identifiant HAL du dépôt","nb de notices HAL pour ce DOI","article en OA via HAL + ISTEX ?","URL article OA via HAL + ISTEX","texte intégral dans HAL ?","Année de publication"]];
 
 
 $("#send").on("click",function(){
@@ -84,6 +84,7 @@ function receiveUnpaywall(data){
       info.is_oa = data.is_oa;
       info.journal_is_oa = data.journal_is_oa;
       info.journal_is_in_doaj = data.journal_is_in_doaj;
+      info.year = data.year;
       if (data.best_oa_location != undefined){
          info.best_oa_location = "<a href=\""+data.best_oa_location.url+"\">"+data.best_oa_location.evidence+"</a>";
       }
@@ -91,7 +92,7 @@ function receiveUnpaywall(data){
    // Send query about the DOI to HAL
    $.get("http://api.archives-ouvertes.fr/search/?wt=json&fq=doiId_s:(" 
          + doi[lastSentQuery].replace(/\(/g,"\\(").replace(/\)/g,"\\)").replace(/:/g,"\\:")
-         + ")&fl=halId_s,fileMain_s,linkExtId_s,linkExtUrl_s")
+         + ")&fl=halId_s,fileMain_s,linkExtId_s,linkExtUrl_s,producedDateY_i")
     .done(receiveHal);
 }
 
@@ -104,6 +105,9 @@ function receiveHal(data){
       info.linkExtId = data.response.docs[0].linkExtId_s;
       info.linkExtUrl = data.response.docs[0].linkExtUrl_s;
       info.fileMain = data.response.docs[0].fileMain_s;
+      if(info.year==undefined){
+         info.year = data.response.docs[0].producedDateY_i;
+      }
    }
    
    // Prepare values for the next table row to be added
@@ -136,8 +140,9 @@ function receiveHal(data){
    +"<td>"+info.linkExtId+"</td>"
    +"<td><small><a href=\""+info.linkExtUrl+"\">"+info.linkExtUrl+"</a></small></td>"
    +"<td><small><a href=\""+info.fileMain+"\">"+info.fileMain+"</a></small></td>"
+   +"<td>"+info.year+"</td>"
    +"</tr>");
-   var resultRow = [doi[lastSentQuery],col2, col3, col4, col5,info.best_oa_location, info.halId, info.halNb,info.linkExtId,info.linkExtUrl,info.fileMain];
+   var resultRow = [doi[lastSentQuery],col2, col3, col4, col5,info.best_oa_location, info.halId, info.halNb,info.linkExtId,info.linkExtUrl,info.fileMain,info.year];
    result[lastSentQuery+1] = resultRow;
    lastReceivedQuery += 1;
    $("#progress").html(parseInt(1000.0*(lastReceivedQuery+1)/doi.length)/10);
