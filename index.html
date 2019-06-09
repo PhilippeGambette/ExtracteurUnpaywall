@@ -1,7 +1,24 @@
     <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
             "http://www.w3.org/TR/html4/loose.dtd">
 <html>
+<!--
+    Extracteur Unpaywall, v1.0, 2019-06-09
+    Évaluer la proportion des publications en libre accès parmi une liste de DOI
+    Copyright (C) 2018-2019 - Romain Boistel, Frédérique Bordignon, Philippe Gambette
 
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
 <head>
   <title>Extracteur Unpaywall</title>
   <meta name="Description" content="Extracteur Unpaywall">  
@@ -16,10 +33,16 @@ td,th{border:1px solid black;padding:5px;text-align:center}
 <body>
 <h1>Extracteur Unpaywall</h1>
 
-Cet outil vise à évaluer la proportion de publications en libre accès parmi une liste de DOI.<br/><br/>
-Codé par <a href="http://igm.univ-mlv.fr/~gambette">Philippe Gambette</a>, il est dérivé de l'outil conçu par Frédérique Bordignon et Romain Boistel, 
+<p>
+Cet outil vise à évaluer la proportion de publications en libre accès parmi une liste de DOI,
+en utilisant les API d'<a href="https://unpaywall.org/products/api">Unpaywall</a> et de <a href="https://api.archives-ouvertes.fr/docs/search">HAL</a>.
+<br/><br/>
+Codé par <a href="http://igm.univ-mlv.fr/~gambette">Philippe Gambette</a> en Javascript/jQuery,
+il est dérivé de l'outil conçu par Frédérique Bordignon et Romain Boistel, 
 <a href="https://carnetist.hypotheses.org/1297">présenté sur le carnet Hypothèses <i>Carnet'IST</i></a>.
-Son code est disponible sous licence libre <a href="https://github.com/PhilippeGambette/ExtracteurUnpaywall">sur GitHub</a>.
+Son code est disponible <a href="https://github.com/PhilippeGambette/ExtracteurUnpaywall">sur GitHub</a>
+sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GPLv3</a>.
+</p>
 
 <h2>Liste de DOI</h2>
 

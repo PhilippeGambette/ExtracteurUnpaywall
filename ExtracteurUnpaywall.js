@@ -1,3 +1,22 @@
+/*
+    Extracteur Unpaywall, v1.0, 2019-06-09
+    √âvaluer la proportion des publications en libre acc√®s parmi une liste de DOI
+    Copyright (C) 2018-2019 - Romain Boistel, Fr√©d√©rique Bordignon, Philippe Gambette
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 "use strict";
 $(document).ready(function(){
 // DOI list
@@ -19,7 +38,7 @@ var oa = 0;
 var timer = "";
 
 // Result
-var result = [["DOI","bilan OA","article en OA d'aprËs Unpaywall ?","revue en OA d'aprËs Unpaywall ?","revue dans le DOAJ d'aprËs Unpaywall ?","Meilleure source du texte intÈgral selon Unpaywall","Identifiant HAL du dÈpÙt","nb de notices HAL pour ce DOI","article en OA via HAL + ISTEX ?","URL article OA via HAL + ISTEX","texte intÈgral dans HAL ?"]];
+var result = [["DOI","bilan OA","article en OA d'apr√®s Unpaywall ?","revue en OA d'apr√®s Unpaywall ?","revue dans le DOAJ d'apr√®s Unpaywall ?","Meilleure source du texte int√©gral selon Unpaywall","Identifiant HAL du d√©p√¥t","nb de notices HAL pour ce DOI","article en OA via HAL + ISTEX ?","URL article OA via HAL + ISTEX","texte int√©gral dans HAL ?"]];
 
 
 $("#send").on("click",function(){
@@ -126,7 +145,9 @@ function receiveHal(data){
 }
 
 /************************************/
-/* code below derived from the code by A.H. Bitubekk from https://stackoverflow.com/questions/14964035/how-to-export-javascript-array-info-to-csv-on-client-side
+/* code below used to download the CSV file
+/* derived from the code by A.H. Bitubekk
+/* from https://stackoverflow.com/questions/14964035/how-to-export-javascript-array-info-to-csv-on-client-side
 /************************************/
 
 // CSV file
