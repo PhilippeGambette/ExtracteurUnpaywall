@@ -1,0 +1,78 @@
+    <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+            "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+  <title>Extracteur Unpaywall</title>
+  <meta name="Description" content="Extracteur Unpaywall">  
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <link rel="icon" type="type/ico" href="favicon.ico" />
+  <style>
+body{font-family:calibri,verdana}
+td,th{border:1px solid black;padding:5px;text-align:center}
+  </style>
+</head>  
+
+<body>
+<h1>Extracteur Unpaywall</h1>
+
+Cet outil vise à évaluer la proportion de publications en libre accès parmi une liste de DOI.<br/><br/>
+Codé par <a href="http://igm.univ-mlv.fr/~gambette">Philippe Gambette</a>, il est dérivé de l'outil conçu par Frédérique Bordignon et Romain Boistel, 
+<a href="https://carnetist.hypotheses.org/1297">présenté sur le carnet Hypothèses <i>Carnet'IST</i></a>.
+Son code est disponible sous licence libre <a href="https://github.com/PhilippeGambette/ExtracteurUnpaywall">sur GitHub</a>.
+
+<h2>Liste de DOI</h2>
+
+<p>
+Merci d'indiquer ci-dessous la liste des DOI des articles ciblés :<br/>
+<textarea id="doiList" cols="50" rows="20">
+10.1007/s11401-012-0755-7
+10.1016/j.dam.2017.07.015
+10.1186/s12918-017-0442-0
+10.1007/s00285-016-1068-3
+10.1371/journal.pcbi.1005611 
+10.1007/s11538-017-0318-x
+10.7202/1038375ar
+10.1007/s11538-016-0199-4
+10.1016/j.tcs.2013.11.036
+10.1016/j.biosystems.2013.05.010
+10.1007/s00285-011-0456-y 
+10.1142/S0219720012500047
+10.1051/ro/2012001
+10.1016/j.ipl.2010.03.015
+10.1109/tcbb.2007.1046
+10.1007/978-3-319-16706-0_12
+10.1007/978-3-319-29516-9_17
+10.1007/978-3-642-36065-7_13
+10.1093/bioinformatics/btp217
+10.1007/978-3-642-10745-0_61
+10.1007/978-3-642-02441-2_26
+10.1007/978-3-642-10217-2_17
+10.1007/978-3-540-74839-7_6</textarea><br/>
+</p>
+
+<p>
+Merci d'indiquer ci-dessous votre adresse de courriel (elle n'est pas enregistrée sur ce serveur mais est transmise à l'API d'<a href="https://unpaywall.org/">Unpaywall</a> qui détermine si un article est disponible en libre accès, d'après son DOI) :<br/>
+<input type="email" id="email"/>
+</p>
+
+<p>
+<input type="button" id="send" value="Envoyer les DOI !"/>
+</p>
+
+<h2>Tableau de résultats</h2>
+
+<p>
+Résultats obtenus : <span id="progress">0</span>%<br/>
+Pourcentage de publications en open access parmi la liste des DOI fournis : <span id="oa">0</span>%<br/>
+</p>
+
+<table id="results">
+<a href="" id="download">Télécharger le tableau ci-dessous au format CSV.</a>
+<tr><th>DOI</th><th>bilan OA</th><th>article en OA d'après Unpaywall ?</th><th>revue en OA d'après Unpaywall ?</th><th>revue dans le DOAJ d'après Unpaywall ?</th><th>Meilleure source du texte intégral selon Unpaywall</th><th>Identifiant HAL du dépôt</th><th>nb de notices HAL pour ce DOI</th><th>article en OA via HAL + ISTEX ?</th><th>URL article OA via HAL + ISTEX</th><th>texte intégral dans HAL ?</th></tr>
+</table>
+
+<SCRIPT TYPE="text/javascript" SRC="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></SCRIPT>
+<SCRIPT TYPE="text/javascript" SRC="./ExtracteurUnpaywall.js"></SCRIPT>
+
+</body></html>
