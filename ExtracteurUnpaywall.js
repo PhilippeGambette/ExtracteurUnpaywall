@@ -1,5 +1,5 @@
 /*
-    Extracteur Unpaywall, v1.0, 2019-06-09
+    Extracteur Unpaywall, v1.1, 2019-06-10
     Évaluer la proportion des publications en libre accès parmi une liste de DOI
     Copyright (C) 2018-2019 - Romain Boistel, Frédérique Bordignon, Philippe Gambette
 
@@ -38,8 +38,10 @@ var oa = 0;
 var timer = "";
 
 // Result
-var result = [["DOI","bilan OA","article en OA d'après Unpaywall ?","revue en OA d'après Unpaywall ?","revue dans le DOAJ d'après Unpaywall ?","Meilleure source du texte intégral selon Unpaywall","Identifiant HAL du dépôt","nb de notices HAL pour ce DOI","article en OA via HAL + ISTEX ?","URL article OA via HAL + ISTEX","texte intégral dans HAL ?","Année de publication"]];
-
+var result = [];
+var oaByYear = new Object();
+var publicationsByYear = new Object();
+var graphDisplayed = false;
 
 $("#send").on("click",function(){
    // Save values extracted from the DOI list in the table doi
@@ -49,6 +51,16 @@ $("#send").on("click",function(){
    lastSentQuery = -1;
    lastReceivedQuery = -1;
    oa = 0;
+   
+   // Reinitialize the table
+   result = [["DOI","bilan OA","article en OA d'après Unpaywall ?","revue en OA d'après Unpaywall ?","revue dans le DOAJ d'après Unpaywall ?","Meilleure source du texte intégral selon Unpaywall","Identifiant HAL du dépôt","nb de notices HAL pour ce DOI","article en OA via HAL + ISTEX ?","URL article OA via HAL + ISTEX","texte intégral dans HAL ?","Année de publication"]];
+   $("#results").html('<tr id="titleRow"></tr>');
+   result[0].forEach(function(col){
+      $("#titleRow").append("<th>"+col+"</th>");
+   });
+   oaByYear = new Object();
+   publicationsByYear = new Object();
+   graphDisplayed = false;
    
    // Test a new DOI every second, in case the previous test was finished
    timer = setInterval(sendQuery,1000);
@@ -142,11 +154,60 @@ function receiveHal(data){
    +"<td><small><a href=\""+info.fileMain+"\">"+info.fileMain+"</a></small></td>"
    +"<td>"+info.year+"</td>"
    +"</tr>");
+   
    var resultRow = [doi[lastSentQuery],col2, col3, col4, col5,info.best_oa_location, info.halId, info.halNb,info.linkExtId,info.linkExtUrl,info.fileMain,info.year];
    result[lastSentQuery+1] = resultRow;
+   
+   // Go the next DOI query
    lastReceivedQuery += 1;
+   
+   // Update the progress rate and the open access rate
    $("#progress").html(parseInt(1000.0*(lastReceivedQuery+1)/doi.length)/10);
    $("#oa").html(parseInt(1000.0*oa/(lastReceivedQuery+1))/10);
+   
+   // Update the graph and the table of number of publications per year used to build it
+   if(info.year == undefined){
+      info.year = "undefined";
+   }
+   if(publicationsByYear[info.year] == undefined){
+      publicationsByYear[info.year] = 1;
+      oaByYear[info.year] = 0;
+   } else {
+      publicationsByYear[info.year] += 1;
+   }
+
+   if(col2 == "OA"){
+      oaByYear[info.year] += 1;
+   }
+   
+   // Build the graph displaying the open access evolution by year
+   var years = [];
+   var oaPercentage = [];
+   var i = 0;   
+   Object.keys(publicationsByYear).forEach(function(year){
+      // Consider only years with at least 5 publications
+      if(year != "undefined" && publicationsByYear[year]>4){
+         years[i] = year;
+         oaPercentage[i] = parseInt((100.0*oaByYear[year])/(publicationsByYear[year]));
+         i += 1;
+      }
+   });
+   
+   if(years.length>0){
+      if(graphDisplayed){
+         Plotly.react( oaEvolution, [{
+            x: years,
+            y: oaPercentage }], { 
+            margin: { t: 0 } }, {showSendToCloud:true} );
+         Plotly.restyle(oaEvolution, {'marker.color': ['lightgreen']});
+      } else {
+         Plotly.plot( oaEvolution, [{
+            x: years,
+            y: oaPercentage }], { 
+            margin: { t: 0 } }, {showSendToCloud:true} );
+         graphDisplayed = true;            
+      }
+   }
 }
 
 /************************************/

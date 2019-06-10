@@ -2,7 +2,7 @@
             "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <!--
-    Extracteur Unpaywall, v1.0, 2019-06-09
+    Extracteur Unpaywall, v1.1, 2019-06-10
     Évaluer la proportion des publications en libre accès parmi une liste de DOI
     Copyright (C) 2018-2019 - Romain Boistel, Frédérique Bordignon, Philippe Gambette
 
@@ -37,12 +37,15 @@ td,th{border:1px solid black;padding:5px;text-align:center}
 Cet outil vise à évaluer la proportion de publications en libre accès parmi une liste de DOI,
 en utilisant les API d'<a href="https://unpaywall.org/products/api">Unpaywall</a>
 et de <a href="https://api.archives-ouvertes.fr/docs/search">HAL</a>.
-<br/><br/>
+</p>
+<p>
 Codé par <a href="http://igm.univ-mlv.fr/~gambette">Philippe Gambette</a> en Javascript/jQuery,
 il est dérivé de l'outil conçu par Frédérique Bordignon et Romain Boistel, 
 <a href="https://carnetist.hypotheses.org/1297">présenté sur le carnet Hypothèses <i>Carnet'IST</i></a>.
 Son code est disponible <a href="https://github.com/PhilippeGambette/ExtracteurUnpaywall">sur GitHub</a>
 sous licence <a href="https://www.gnu.org/licenses/gpl-3.0.fr.html">GPLv3</a>.
+Il utilise les bibliothèques <a href="http://api.jquery.com">jQuery</a>
+et <a href="https://plot.ly/javascript/">Plotly.js</a>
 </p>
 
 <h2>Liste de DOI</h2>
@@ -76,7 +79,10 @@ Merci d'indiquer ci-dessous la liste des DOI des articles ciblés :<br/>
 </p>
 
 <p>
-Merci d'indiquer ci-dessous votre adresse de courriel (elle n'est pas enregistrée sur ce serveur mais est transmise à l'API d'<a href="https://unpaywall.org/">Unpaywall</a> qui détermine si un article est disponible en libre accès, d'après son DOI) :<br/>
+Merci d'indiquer ci-dessous votre adresse de courriel
+(elle n'est pas enregistrée sur ce serveur mais est transmise 
+à l'API d'<a href="https://unpaywall.org/">Unpaywall</a> 
+qui détermine si un article est disponible en libre accès, d'après son DOI) :<br/>
 <input type="email" id="email"/>
 </p>
 
@@ -91,12 +97,26 @@ Résultats obtenus : <span id="progress">0</span>%<br/>
 Pourcentage de publications en open access parmi la liste des DOI fournis : <span id="oa">0</span>%<br/>
 </p>
 
-<table id="results">
+<p>
 <a href="" id="download">Télécharger le tableau ci-dessous au format CSV.</a>
-<tr><th>DOI</th><th>bilan OA</th><th>article en OA d'après Unpaywall ?</th><th>revue en OA d'après Unpaywall ?</th><th>revue dans le DOAJ d'après Unpaywall ?</th><th>Meilleure source du texte intégral selon Unpaywall</th><th>Identifiant HAL du dépôt</th><th>nb de notices HAL pour ce DOI</th><th>article en OA via HAL + ISTEX ?</th><th>URL article OA via HAL + ISTEX</th><th>texte intégral dans HAL ?</th><th>année de publication</th></tr>
+<table id="results">
 </table>
+</p>
+
+<h2>&Eacute;volution du pourcentage de DOI en libre accès</h2>
+
+<p>
+Le graphique ci-dessous montre l'évolution, par année de publication
+du pourcentage de DOI qui correspondent à des publications en libre accès
+d'après le tableau ci-dessus.
+</p>
+<p>
+Il ne contient que les années qui correspondent à plus de 5 publications.
+</p>
+<div id="oaEvolution" style="width:600px;height:350px;"></div>
 
 <SCRIPT TYPE="text/javascript" SRC="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></SCRIPT>
+<SCRIPT src="https://cdn.plot.ly/plotly-latest.min.js"></SCRIPT>
 <SCRIPT TYPE="text/javascript" SRC="./ExtracteurUnpaywall.js"></SCRIPT>
 
 </body></html>
