@@ -67,11 +67,11 @@ $("#send").on("click",function(){
 })
 
 function sendQuery(){
-   // Reinitialize the object to store information about the next publication
-   info = new Object();
-
    // Test the next DOI if the previous one was already tested
    if(lastSentQuery==lastReceivedQuery){      
+      // Reinitialize the object to store information about the next publication
+      info = new Object();
+
       // Send a new query
       lastSentQuery += 1;
       
@@ -89,7 +89,6 @@ function sendQuery(){
 
 // Save data received from Unpaywall
 function receiveUnpaywall(data){
-   
    if (data != undefined){
       // Unpaywall has found the DOI
       info.doi = data.doi;
@@ -101,10 +100,11 @@ function receiveUnpaywall(data){
          info.best_oa_location = "<a href=\""+data.best_oa_location.url+"\">"+data.best_oa_location.evidence+"</a>";
       }
    }
+   
    // Send query about the DOI to HAL
    $.get("http://api.archives-ouvertes.fr/search/?wt=json&fq=doiId_s:(" 
          + doi[lastSentQuery].replace(/\(/g,"\\(").replace(/\)/g,"\\)").replace(/:/g,"\\:")
-         + ")&fl=halId_s,fileMain_s,linkExtId_s,linkExtUrl_s,producedDateY_i")
+         + ")&fl=halId_s,fileMain_s,linkExtId_s,linkExtUrl_s,producedDateY_i,uri_s")
     .done(receiveHal);
 }
 
@@ -113,10 +113,15 @@ function receiveHal(data){
    if(data.response.docs.length>0){
       // HAL has found the DOI
       info.halNb = data.response.numFound;
-      info.halId = data.response.docs[0].halId;
+      info.halId = '<a href="'+data.response.docs[0].uri_s+'">'+data.response.docs[0].halId_s+"</a>";
       info.linkExtId = data.response.docs[0].linkExtId_s;
       info.linkExtUrl = data.response.docs[0].linkExtUrl_s;
-      info.fileMain = data.response.docs[0].fileMain_s;
+      if(data.response.docs[0].linkExtUrl_s!=undefined){
+         info.linkExtUrl = "<a href=\""+data.response.docs[0].linkExtUrl_s+"\">"+data.response.docs[0].linkExtUrl_s+"</a>";
+      }
+      if(data.response.docs[0].fileMain_s!=undefined){
+         info.fileMain = "<a href=\""+data.response.docs[0].fileMain_s+"\">"+data.response.docs[0].fileMain_s+"</a>";
+      }
       if(info.year==undefined){
          info.year = data.response.docs[0].producedDateY_i;
       }
@@ -150,8 +155,8 @@ function receiveHal(data){
    +"<td>"+info.halId+"</td>"
    +"<td>"+info.halNb+"</td>"
    +"<td>"+info.linkExtId+"</td>"
-   +"<td><small><a href=\""+info.linkExtUrl+"\">"+info.linkExtUrl+"</a></small></td>"
-   +"<td><small><a href=\""+info.fileMain+"\">"+info.fileMain+"</a></small></td>"
+   +"<td><small>"+info.linkExtUrl+"</small></td>"
+   +"<td><small>"+info.fileMain+"</small></td>"
    +"<td>"+info.year+"</td>"
    +"</tr>");
    
@@ -198,13 +203,17 @@ function receiveHal(data){
          Plotly.react( oaEvolution, [{
             x: years,
             y: oaPercentage }], { 
-            margin: { t: 0 } }, {showSendToCloud:true} );
+              margin: { t: 0 },
+              xaxis: { autotick: false, ticks: 'outside', tick0: 0, dtick: 1, ticklen: 5, tickwidth: 1, tickcolor: 'gray'} 
+            }, {showSendToCloud:true} );
          Plotly.restyle(oaEvolution, {'marker.color': ['lightgreen']});
       } else {
          Plotly.plot( oaEvolution, [{
             x: years,
             y: oaPercentage }], { 
-            margin: { t: 0 } }, {showSendToCloud:true} );
+            margin: { t: 0 },
+            xaxis: { autotick: false, ticks: 'outside', tick0: 0, dtick: 1, ticklen: 5, tickwidth: 1, tickcolor: 'gray'}
+  }, {showSendToCloud:true} );
          graphDisplayed = true;            
       }
    }
@@ -216,11 +225,12 @@ function receiveHal(data){
 /* from https://stackoverflow.com/questions/14964035/how-to-export-javascript-array-info-to-csv-on-client-side
 /************************************/
 
-// CSV file
-var csvContent = '';
-
 // Download the table containing the results
 $("#download").on("click",function(e){
+
+   // CSV file
+   var csvContent = '';
+
    e.preventDefault();
    
    // Building the CSV from the Data two-dimensional array
@@ -239,7 +249,7 @@ $("#download").on("click",function(e){
    });
    
    // Build date
-   var m = new Date(Date.now()).getMonth();
+   var m = new Date(Date.now()).getMonth()+1;
    if(m<10){
       m="0"+m;
    }
@@ -247,7 +257,7 @@ $("#download").on("click",function(e){
    if(d<10){
       d="0"+d;
    }
-   var date = new Date(Date.now()).getFullYear()+"-"+m+"-"+d;
+   var date = new Date(Date.now()).getFullYear()+"-"+m+"-"+d+"_"+new Date(Date.now()).getHours()+"h"+new Date(Date.now()).getMinutes();
    
    // Save file
    download(csvContent, 'download-'+date+'.csv', 'text/csv;encoding:utf-8');
