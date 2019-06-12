@@ -1,5 +1,5 @@
 /*
-    Extracteur Unpaywall, v1.1, 2019-06-10
+    Extracteur Unpaywall, v1.2, 2019-06-13
     Évaluer la proportion des publications en libre accès parmi une liste de DOI
     Copyright (C) 2018-2019 - Romain Boistel, Frédérique Bordignon, Philippe Gambette
 
