@@ -35,7 +35,7 @@ td,th{border:1px solid black;padding:5px;text-align:center}
 
 <p>
 Cet outil vise à extraire les informations souhaitées du référentiel auteurs de HAL pour tous les auteurs
-dont une des publications est rattachée à une structure donnée.
+dont au moins une des publications est rattachée à une structure donnée.
 </p>
 <p>
 Programmé par <a href="http://igm.univ-mlv.fr/~gambette">Philippe Gambette</a> en Javascript/jQuery,
@@ -48,10 +48,11 @@ son code est disponible <a href="https://github.com/PhilippeGambette/ExtracteurU
 Merci d'indiquer ci-dessous l'identifiant HAL de la structure dont vous voulez récupérer des informations sur les auteurs :<br/>
 <input type="text/javascript" id="structure" value="3210"/><br/><br/>
 Merci d'indiquer ci-dessous la liste des <a href="https://api.archives-ouvertes.fr/docs/ref/?resource=author&schema=fields#fields">champs HAL</a>, séparés par des virgules, que vous voulez récupérer à propos des auteurs :<br/>
-<input type="text/javascript" id="champsAuteurs" value="fullName_s,lastName_s,idHal_i,idHal_s,hasCV_bool,valid_s,orcid_id"/><br/>
+<input type="text/javascript" id="champsAuteurs" value="fullName_s,lastName_s,idHal_i,idHal_s,hasCV_bool,valid_s,orcid_id" style="width:100%"/><br/>
 </p>
 
 <p>
+<i>Attention, la requête de récupération de la liste des auteurs d'une structure peut prendre beaucoup de temps (2 minutes, par exemple) !</i><br/>
 <input type="button" id="send" value="Envoyer la requête !"/>
 <!--https://api.archives-ouvertes.fr/search/?q=*:*&rows=0&facet=true&facet.field=structHasAuthId_fs&facet.prefix=914_&wt=json-->
 </p>

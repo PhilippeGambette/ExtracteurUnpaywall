@@ -103,10 +103,13 @@ function sendQuery(){
 function receiveHal(data){
    // Add a new row to the table
    var row = "";
+   var resultRow = [];
    result[0].forEach(function(key){
       row += "<td>"+data.response.docs[0][key]+"</td>"
+      resultRow.push(data.response.docs[0][key])
    })
    $("#results").find("tbody").append("\n<tr id=\"" + author[lastSentQuery] + "\">" + row + "</tr>");
+   result[lastSentQuery+1] = resultRow;
 
    /*
    if(data.response.docs.length>0){
@@ -159,8 +162,6 @@ function receiveHal(data){
    +"<td>"+info.year+"</td>"
    +"</tr>");
    
-   var resultRow = [author[lastSentQuery],col2, col3, col4, col5,info.best_oa_location, info.halId, info.halNb,info.linkExtId,info.linkExtUrl,info.fileMain,info.year];
-   result[lastSentQuery+1] = resultRow;
    */
    
    // Go the next author query
