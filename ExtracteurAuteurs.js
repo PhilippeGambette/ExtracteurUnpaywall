@@ -248,15 +248,29 @@ $("#download").on("click",function(e){
 // Download the table containing the results without duplicates
 $("#download2").on("click",function(e){
 
-   // CSV file
+
+   // CSV file download
    var csvContent = '';
 
    e.preventDefault();
    
    // Building the CSV from the Object associating an array to each key
    // Each column is separated by ";" and new line "\n" for next row
+
+   //Title row
+   var dString = "";
+   result[0].forEach(function(str){
+      if(str==undefined){
+         str="";
+      } else {
+         str=""+str;
+      }
+      dString += '"'+str.replace(/"/g,'""')+'";';
+   })
+   csvContent += dString + '\n';
+
    Object.keys(resultByName).forEach(function(infoArray,index) {
-      var dString = "";
+      dString = "";
       resultByName[infoArray].forEach(function(str){
          if(str==undefined){
             str="";
