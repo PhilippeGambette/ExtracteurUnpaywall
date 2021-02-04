@@ -1,7 +1,7 @@
 /*
-    Extracteur Unpaywall, v1.3, 2019-07-02
+    Extracteur Unpaywall, v1.4, 2021-02-04
     Évaluer la proportion des publications en libre accès parmi une liste de DOI
-    Copyright (C) 2018-2019 - Romain Boistel, Frédérique Bordignon, Philippe Gambette
+    Copyright (C) 2018-2021 - Romain Boistel, Frédérique Bordignon, Philippe Gambette
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ var info = new Object();
 var timer = "";
 
 // Get the structure id
-var structure = $("#structure").val()
+var structure = $("#structure").val().split(",");
 
 // Number of found publications
 var foundPublications = 0
@@ -48,7 +48,19 @@ $("#send").on("click",function(){
    // Reinitialize lastSentQuery, lastReceivedQuery and structure
    lastSentQuery = -1;
    lastReceivedQuery = -1;
-   structure = $("#structure").val()
+   structure = $("#structure").val().split(",");
+   
+   // Prepare the string to filter the structure or structures in the query
+   var structureFilter = structure[0];
+   var i = 0;
+   if(structure.length > 1){
+      structureFilter = "("+structureFilter;
+      while(i<structure.length){
+         structureFilter += "%20OR%20" + structure[i];
+         i++;
+      }
+      structureFilter += ")";
+   }
    
    // Reinitialize the table
    result = [];
@@ -67,9 +79,9 @@ $("#send").on("click",function(){
    
    // Extract the list of all authors of the structure
    //var url = "https://api.archives-ouvertes.fr/search/?q=*:*&rows=0&facet=true&facet.field=structHasAuthId_fs&facet.prefix="+$("#structure").val()+"_&wt=json"
-   var url = "http://api.archives-ouvertes.fr/search/?q=structId_i:"+structure+"&wt=json&fl=structHasAuthId_fs&rows=10000";
+   var url = "http://api.archives-ouvertes.fr/search/?q=structId_i:"+structureFilter+"&wt=json&fl=structHasAuthId_fs&rows=10000";
    if($("#annees").val() != ""){
-      url = "http://api.archives-ouvertes.fr/search/?q=structId_i:"+structure+"&fq=producedDateY_i:"+$("#annees").val()+"&wt=json&fl=structHasAuthId_fs&rows=10000";
+      url = "http://api.archives-ouvertes.fr/search/?q=structId_i:"+structureFilter+"&fq=producedDateY_i:"+$("#annees").val()+"&wt=json&fl=structHasAuthId_fs&rows=10000";
    }
    $.get(url).done(authorList);
    console.log(url);
@@ -86,18 +98,23 @@ function authorList(data){
          // Get the structure id and the author id with this regular expression:
          var ids = /^([^_]*)_.*JoinSep_([^_]*)_FacetSep/.exec(authors[a]);
          if(ids != null){
-            if(ids[1] == structure){
-               // If the author belongs to the structure, save it!
-               author[ids[2]] = 1;
+            // Check if the author is in one of the structures of interest
+            var i = 0;
+            while(i < structure.length){
+               if(ids[1] == structure[i]){
+                  // If the author belongs to the structure, save it!
+                  author[ids[2]] = 1;
+               }
+               i++;
             }
          }
       }
    }
    
    if(data.response.numFound>foundPublications){
-      var url = "http://api.archives-ouvertes.fr/search/?q=structId_i:"+structure+"&wt=json&fl=structHasAuthId_fs&rows=10000&start="+foundPublications;
+      var url = "http://api.archives-ouvertes.fr/search/?q=structId_i:"+structureFilter+"&wt=json&fl=structHasAuthId_fs&rows=10000&start="+foundPublications;
       if($("#annees").val() != ""){
-         url = "http://api.archives-ouvertes.fr/search/?q=structId_i:"+structure+"&fq=producedDateY_i:"+$("#annees").val()+"&wt=json&fl=structHasAuthId_fs&rows=10000&start="+foundPublications;
+         url = "http://api.archives-ouvertes.fr/search/?q=structId_i:"+structureFilter+"&fq=producedDateY_i:"+$("#annees").val()+"&wt=json&fl=structHasAuthId_fs&rows=10000&start="+foundPublications;
       }
       console.log(url);
       $.get(url).done(authorList);

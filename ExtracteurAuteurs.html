@@ -2,9 +2,9 @@
             "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <!--
-    Extracteur Unpaywall, v1.3, 2019-07-02
+    Extracteur Unpaywall, v1.4, 2021-02-04
     Évaluer la proportion des publications en libre accès parmi une liste de DOI
-    Copyright (C) 2018-2019 - Romain Boistel, Frédérique Bordignon, Philippe Gambette
+    Copyright (C) 2018-2021 - Romain Boistel, Frédérique Bordignon, Philippe Gambette
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -45,8 +45,8 @@ son code est disponible sous licence libre <a href="https://github.com/PhilippeG
 <h2>Structure ciblée</h2>
 
 <p>
-Identifiant HAL de la structure dont vous voulez récupérer des informations sur les auteurs (utilisez <a href="https://aurehal.archives-ouvertes.fr/structure/index">AuréHAL</a> pour trouver le numéro d'identifiant HAL de la structure qui vous intéresse) :<br/>
-<input type="text/javascript" id="structure" value="3210"/><br/><br/>
+Identifiant HAL de la structure dont vous voulez récupérer des informations sur les auteurs (utilisez <a href="https://aurehal.archives-ouvertes.fr/structure/index">AuréHAL</a> pour trouver le numéro d'identifiant HAL de la structure qui vous intéresse, utilisez la virgule comme séparateur, sans espace, si vous souhaitez combiner plusieurs identifiants de structures) :<br/>
+<input type="text/javascript" id="structure" value="3210,1001627"/><br/><br/>
 
 Période visée (seuls les auteurs, affiliés à la structure ci-dessus, de publications publiées pendant cette période, seront pris en compte ; laissez vide si vous voulez récupérer toutes les formes auteurs affiliées à la structure) :<br/>
 <input type="text/javascript" id="annees" value="[2016 TO 2018]"/><br/><br/>
