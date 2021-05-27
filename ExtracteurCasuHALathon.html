@@ -149,7 +149,7 @@ IFSTTAR</textarea><br>
     let collectionObject = {};
 
     // Base de l'URL requête à l'API par collection
-    let urlBegin = "http://api.archives-ouvertes.fr/search/?wt=json&q=collCode_s:%22";
+    let urlBegin = "https://api.archives-ouvertes.fr/search/?wt=json&q=collCode_s:%22";
     let urlEnd = "%22&rows=10000&start=0&fl=halId_s,docType_s,fileType_s,linkExtId_s";
     let url = "";
     let totalCollectionNb = 0;
@@ -215,6 +215,9 @@ IFSTTAR</textarea><br>
 
     // Clic sur le bouton "Lancer l'extraction"
     document.querySelector("#extract").addEventListener("click", function () {
+        // Désactivation du bouton
+        document.querySelector("#extract").disabled = true;
+
         // Extraction de la liste des collections à traiter
         const allCollections = document.querySelector("#collectionList").value;
         collectionList = allCollections.split("\n");
