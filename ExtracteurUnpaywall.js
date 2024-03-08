@@ -102,7 +102,7 @@ function receiveUnpaywall(data){
    }
    
    // Send query about the DOI to HAL
-   $.get("http://api.archives-ouvertes.fr/search/?wt=json&fq=doiId_s:(" 
+   $.get("https://api.archives-ouvertes.fr/search/?wt=json&fq=doiId_s:(" 
          + doi[lastSentQuery].replace(/\(/g,"\\(").replace(/\)/g,"\\)").replace(/:/g,"\\:")
          + ")&fl=halId_s,fileMain_s,linkExtId_s,linkExtUrl_s,producedDateY_i,uri_s")
     .done(receiveHal);
